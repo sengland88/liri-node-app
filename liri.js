@@ -85,7 +85,38 @@ function getSong() {
 
 function getMovie() {
     console.log("getMovie function is connected")
-}
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "Enter a movie",
+                name: "movie"
+            }
+        ])
+        .then(function(data) {
+            // console.log("//////////////////////////////////")
+            // console.log(data.movie)
+            // console.log("//////////////////////////////////")
+            axios.get('http://www.omdbapi.com/?apikey=trilogy&t=' + data.movie)
+            .then(function(data) {
+
+                console.log(data)
+
+                let movie = data.data
+
+                console.log("-=-=-=-=-=-=-=-=-=-=")
+                console.log(`Movie: ${movie.Title}`)
+                console.log(`Year: ${movie.Year}`)
+                console.log(`Rating: ${movie.Ratings[0].Value}`)
+                console.log(`Rotten Tomato Rating: ${movie.Ratings[1].Value}`)
+                console.log(`Produced in: ${movie.Country}`)
+                console.log(`Language(s): ${movie.Language}`)
+                console.log(`Movie Plot: ${movie.Plot}`)
+                console.log(`Movie Actors: ${movie.Actors}`)
+                console.log("-=-=-=-=-=-=-=-=-=-=")
+            })
+        }) // end then (prompt)
+} // function end brackets
 
 function doWhatItSays() {
     console.log("doWhatItSays function is connected")
