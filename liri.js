@@ -1,8 +1,11 @@
-// const dotenv = require("dotenv").config();
-// const keys = require("./keys.js");
-// const spotify = new Spotify(keys.spotify);
+require("dotenv").config();
+
+const keys = require("./keys.js");
 const axios = require("axios")
 const inquirer = require("inquirer")
+const Spotify = require("node-spotify-api");
+
+
 
 inquirer
     .prompt([
@@ -81,7 +84,50 @@ function getConcert() {
 
 function getSong() {
     console.log("getSong function is connected")
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "Please enter a song title",
+                name: "song"
+            }
+        ])
+        .then(function(data) {
+
+            let song = data.song
+
+            if (song === "") song = "Lose You To Love Me"   
+
+            const spotify = new Spotify(keys.spotify);
+
+            spotify
+                .search({ type: 'track', query: song , limit: 10})
+
+                .then(function(data) {                    
+                    
+                    let song = data.tracks.items
+
+                    for (let i = 0 ; i < song.length ; i++ ) {
+
+                        let theSong = song[i]
+
+                        console.log("                          ")
+                        console.log(`Artist(s): ${theSong.artists[0].name}`)
+                        console.log(`Track: ${theSong.name}`)
+                        console.log(`Album: ${theSong.album.name}`)
+                        console.log(`Preview Link: ${theSong.preview_url}`)     
+
+                    }
+                              
+                })
+                .catch(function(error){
+                    console.log("you've thrown and error")
+                    console.log(error)
+                })
+        })
 }
+
+
 
 function getMovie() {
     console.log("getMovie function is connected")
@@ -94,13 +140,11 @@ function getMovie() {
             }
         ])
         .then(function(data) {
-            // console.log("//////////////////////////////////")
-            // console.log(data.movie)
-            // console.log("//////////////////////////////////")
-            axios.get('http://www.omdbapi.com/?apikey=trilogy&t=' + data.movie)
-            .then(function(data) {
 
-                console.log(data)
+            if (data.movie === "") data.movie = "A Christmas Story"
+
+            axios.get('http://www.omdbapi.com/?apikey=trilogy&t=' + data.movie)
+            .then(function(data) { 
 
                 let movie = data.data
 
