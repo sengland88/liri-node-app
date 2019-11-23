@@ -1,3 +1,4 @@
+// everything required to run this app
 require("dotenv").config();
 
 const fs = require("fs");
@@ -7,6 +8,7 @@ const keys = require("./keys.js");
 const inquirer = require("inquirer");
 const Spotify = require("node-spotify-api");
 
+// function to handle the program
 function runProgram() {
 
 inquirer
@@ -26,19 +28,15 @@ inquirer
   .then(function(data) {
     switch (data.command) {
       case "concert-this":
-        console.log("concert works");
         getConcert();
         break;
       case "spotify-this-song":
-        console.log("spotify works");
         getSong();
         break;
       case "movie-this":
-        console.log("movies works");
         getMovie();
         break;
       case "do-what-it-says":
-        console.log("do what it says works");
         doWhatItSays();
         break;
       default:
@@ -47,6 +45,7 @@ inquirer
   });
 }
 
+// this function will retrieve the concert information
 function getConcert() {
   inquirer
     .prompt([
@@ -74,22 +73,24 @@ function getConcert() {
             for (let i = 0; i < concerts.length; i++) {
               console.log("---------------------------------");
               console.log(`The concert venue: ${concerts[i].venue.name}`);
-              console.log(
-                `The concert location: ${concerts[i].venue.city}, ${concerts[i].venue.country}`
+              console.log(`The concert location: ${concerts[i].venue.city}, ${concerts[i].venue.country}`
               );
               console.log(`The concert date/time: ${moment(concerts[i].datetime).format("dddd, MMMM Do YYYY, h:mm:ss a")}`);
             }
           }
+          
+          restart()
         })
         .catch(function(error) {
           console.log("!!!!!!!!!!!!!!!!!!!!!");
           console.log(error);
           console.log("!!!!!!!!!!!!!!!!!!!!!");
+          restart()
         });
-        restart()
     }); // end then bracket (prompt)
 } // end function bracket
 
+// this function will retrieve the song information
 function getSong() {
   inquirer
     .prompt([
@@ -121,16 +122,18 @@ function getSong() {
             console.log(`Album: ${theSong.album.name}`);
             console.log(`Preview Link: ${theSong.preview_url}`);
           }
+          restart()
         })
         .catch(function(error) {
           console.log("!!!!!!!!!!!!!!!!!!!!!");
           console.log(error);
           console.log("!!!!!!!!!!!!!!!!!!!!!");
+          restart()
         });
     });
-    restart()
 }
 
+// this function will retrieve the movie information
 function getMovie() {
   inquirer
     .prompt([
@@ -156,21 +159,22 @@ function getMovie() {
           console.log(`Language(s): ${movie.Language}`);
           console.log(`Movie Plot: ${movie.Plot}`);
           console.log(`Movie Actors: ${movie.Actors}`);
-          console.log("-=-=-=-=-=-=-=-=-=-=");
+          restart()
         })
         .catch(function(error) {
           console.log("!!!!!!!!!!!!!!!!!!!!!");
           console.log(error);
           console.log("!!!!!!!!!!!!!!!!!!!!!");
+          restart()
         });
     }); // end then (prompt)
-    restart()
 } // function end brackets
 
+// this function will retrieve the information from the "random.txt" file
 function doWhatItSays() {
   fs.readFile("random.txt", "utf8", function(error, data) {
     if (error) {
-      return console.log(error);
+      console.log("Oops ... there is an error.");
     } else {
       data = data.split(", ");
 
@@ -193,16 +197,14 @@ function doWhatItSays() {
           console.log("!!!!!!!!!!!!!!!!!!!!!");
           console.log("this doesn't exist");
           console.log("!!!!!!!!!!!!!!!!!!!!!");
+      restart()
       }
     }
   });
-  restart()
 }
 
-function restart() {
-  
+function restart() {  
 console.log("*************************************")  
-
 inquirer
     .prompt([
       {
