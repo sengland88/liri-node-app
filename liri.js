@@ -1,10 +1,13 @@
 require("dotenv").config();
 
-var fs = require("fs");
-const keys = require("./keys.js");
+const fs = require("fs");
 const axios = require("axios");
+const moment = require('moment');
+const keys = require("./keys.js");
 const inquirer = require("inquirer");
 const Spotify = require("node-spotify-api");
+
+function runProgram() {
 
 inquirer
   .prompt([
@@ -39,12 +42,12 @@ inquirer
         doWhatItSays();
         break;
       default:
-        console.log("this doesnt exist");
+        console.log("this doesn't exist");
     }
   });
+}
 
 function getConcert() {
-  console.log("getConcert function is connected");
   inquirer
     .prompt([
       {
@@ -74,7 +77,7 @@ function getConcert() {
               console.log(
                 `The concert location: ${concerts[i].venue.city}, ${concerts[i].venue.country}`
               );
-              console.log(`The concert date/time: ${concerts[i].datetime}`);
+              console.log(`The concert date/time: ${moment(concerts[i].datetime).format("dddd, MMMM Do YYYY, h:mm:ss a")}`);
             }
           }
         })
@@ -83,11 +86,11 @@ function getConcert() {
           console.log(error);
           console.log("!!!!!!!!!!!!!!!!!!!!!");
         });
+        restart()
     }); // end then bracket (prompt)
 } // end function bracket
 
 function getSong() {
-  console.log("getSong function is connected");
   inquirer
     .prompt([
       {
@@ -125,10 +128,10 @@ function getSong() {
           console.log("!!!!!!!!!!!!!!!!!!!!!");
         });
     });
+    restart()
 }
 
 function getMovie() {
-  console.log("getMovie function is connected");
   inquirer
     .prompt([
       {
@@ -161,6 +164,7 @@ function getMovie() {
           console.log("!!!!!!!!!!!!!!!!!!!!!");
         });
     }); // end then (prompt)
+    restart()
 } // function end brackets
 
 function doWhatItSays() {
@@ -186,8 +190,33 @@ function doWhatItSays() {
           );
           break;
         default:
-          console.log("this doesnt exist");
+          console.log("!!!!!!!!!!!!!!!!!!!!!");
+          console.log("this doesn't exist");
+          console.log("!!!!!!!!!!!!!!!!!!!!!");
       }
     }
   });
+  restart()
 }
+
+function restart() {
+  
+console.log("*************************************")  
+
+inquirer
+    .prompt([
+      {
+        type: "confirm",
+        message: "Would you like to do another search?",
+        name: "confirm",
+        default: true
+      }
+    ])
+    .then(function(response) {
+      if (response.confirm) {
+        runProgram()
+      }
+    })
+}
+
+runProgram()
