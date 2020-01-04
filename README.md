@@ -28,4 +28,6 @@ To make LIRI more user-friendly, i incorporated inquirer to give the client a li
 
 I also created a restart function that will ask the user if they would like to conduct another search. If yes, it will bring them back to the runProgram function and ask for a command. If not, it will execute the program, which will need to be called again using "node liri.js"
 
-To access the video demostrations: https://drive.google.com/drive/folders/14W-AIYhUWaPp8yDLfR5Jnwdx6ehh9EyE
+<h2>URL</h2>
+Please note that because this is a command line application, I have provided a link to the video demostrations below. 
+To access the video demostrations: http://bit.ly/2ZWQP87
